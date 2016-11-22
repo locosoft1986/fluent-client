@@ -26,10 +26,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function apiObject() {
-  var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-  var path = opts.path;
-  var config = opts.config;
-  var http = opts.http;
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var path = opts.path,
+      config = opts.config,
+      http = opts.http;
 
 
   var remoteObject = function remoteObject(path, config) {
@@ -45,8 +45,8 @@ function apiObject() {
   };
 
   var relationObject = function relationObject(path, relations) {
-    var one = relations.one;
-    var many = relations.many;
+    var one = relations.one,
+        many = relations.many;
 
     var relationObj = new Object();
 
@@ -74,9 +74,9 @@ function apiObject() {
   };
 
   var functionObject = function functionObject(path, config) {
-    var collection = config.collection;
-    var instance = config.instance;
-    var relations = config.relations;
+    var collection = config.collection,
+        instance = config.instance,
+        relations = config.relations;
 
     var fn = function fn(id) {
       var instancePath = path + '/' + id;
@@ -113,10 +113,10 @@ function buildConfig(template) {
     },
 
     relation: function relation(opts, cfg) {
-      var type = opts.type;
-      var name = opts.name;
-      var path = opts.path;
-      var template = opts.template;
+      var type = opts.type,
+          name = opts.name,
+          path = opts.path,
+          template = opts.template;
 
 
       if (!name) {
@@ -139,20 +139,21 @@ function buildConfig(template) {
 }
 
 function FluentClient() {
-  var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-  var template = opts.template;
-  var http = opts.http;
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var httpCfg = _objectWithoutProperties(opts, ['template', 'http']);
+  var defaultTemplate = opts.template,
+      defaultHttp = opts.http,
+      httpCfg = _objectWithoutProperties(opts, ['template', 'http']);
 
-  http = http || (0, _Http2.default)(httpCfg);
+  var defaultOptions = {
+    template: defaultTemplate,
+    http: defaultHttp || (0, _Http2.default)(httpCfg)
+  };
 
   return function (opts, cfg) {
-    var _Object$assign = Object.assign({ http: http, template: template }, opts);
-
-    var template = _Object$assign.template;
-
-    var apiOptions = _objectWithoutProperties(_Object$assign, ['template']);
+    var _Object$assign = Object.assign({}, defaultOptions, opts),
+        template = _Object$assign.template,
+        apiOptions = _objectWithoutProperties(_Object$assign, ['template']);
 
     if (!template) {
       throw "Must define an api template";

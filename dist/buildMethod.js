@@ -41,11 +41,11 @@ var remote = function remote(http) {
   };
 
   var resolveArgs = function resolveArgs(args, opts) {
-    var argNames = opts.args;
-    var base = opts.base;
-    var path = opts.path;
-    var convertFn = opts.convertFn;
-    var props = opts.props;
+    var argNames = opts.args,
+        base = opts.base,
+        path = opts.path,
+        convertFn = opts.convertFn,
+        props = opts.props;
 
 
     if (!argNames) {
@@ -55,10 +55,9 @@ var remote = function remote(http) {
 
       /** need to evaluate path components*/
       if (path && path.match(/\/:[^\/]*/)) {
-        var _evalPath = evalPath(path, props);
-
-        var props = _evalPath.props;
-        var path = _evalPath.path;
+        var _evalPath = evalPath(path, props),
+            props = _evalPath.props,
+            path = _evalPath.path;
       }
 
       /** need to convert props with customize function*/
@@ -90,10 +89,9 @@ var remote = function remote(http) {
           args[_key] = arguments[_key];
         }
 
-        var _resolveArgs = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: null, convertFn: opts.params }));
-
-        var path = _resolveArgs.path;
-        var params = _resolveArgs.props;
+        var _resolveArgs = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: null, convertFn: opts.params })),
+            path = _resolveArgs.path,
+            params = _resolveArgs.props;
 
         return http.get(path, params).then(successFn(opts));
       };
@@ -105,10 +103,9 @@ var remote = function remote(http) {
           args[_key2] = arguments[_key2];
         }
 
-        var _resolveArgs2 = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: args[0], convertFn: opts.data }));
-
-        var path = _resolveArgs2.path;
-        var data = _resolveArgs2.props;
+        var _resolveArgs2 = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: args[0], convertFn: opts.data })),
+            path = _resolveArgs2.path,
+            data = _resolveArgs2.props;
 
         return http.post(path, data).then(successFn(opts));
       };
@@ -120,10 +117,9 @@ var remote = function remote(http) {
           args[_key3] = arguments[_key3];
         }
 
-        var _resolveArgs3 = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: args[0], convertFn: opts.data }));
-
-        var path = _resolveArgs3.path;
-        var data = _resolveArgs3.props;
+        var _resolveArgs3 = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: args[0], convertFn: opts.data })),
+            path = _resolveArgs3.path,
+            data = _resolveArgs3.props;
 
         return http.put(path, data).then(successFn(opts));
       };
@@ -135,10 +131,9 @@ var remote = function remote(http) {
           args[_key4] = arguments[_key4];
         }
 
-        var _resolveArgs4 = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: args[0], convertFn: opts.data }));
-
-        var path = _resolveArgs4.path;
-        var data = _resolveArgs4.props;
+        var _resolveArgs4 = resolveArgs(args, (0, _merge2.default)(opts, { base: base, props: args[0], convertFn: opts.data })),
+            path = _resolveArgs4.path,
+            data = _resolveArgs4.props;
 
         return http.delete(path, data).then(successFn(opts));
       };
@@ -147,9 +142,8 @@ var remote = function remote(http) {
 };
 
 function buildMethod(uri, http, config) {
-  var verb = config.verb;
-
-  var opts = _objectWithoutProperties(config, ['verb']);
+  var verb = config.verb,
+      opts = _objectWithoutProperties(config, ['verb']);
 
   var method = remote(http)[verb];
   return method(uri, opts);

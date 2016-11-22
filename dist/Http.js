@@ -14,8 +14,6 @@ var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var defaultFetch = fetch;
-
 var jsonEncode = function jsonEncode(data) {
   return {
     headers: { 'Content-Type': 'application/json' },
@@ -37,18 +35,19 @@ var jsonDecode = function jsonDecode(response) {
 };
 
 var Http = function Http() {
-  var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 
   var url = opts.url || Http.urlBuilder('http://localhost');
   var headers = opts.headers || Http.headerBuilder();
   var encode = opts.encode || jsonEncode;
   var decode = opts.decode || jsonDecode;
+  var defaultFetch = fetch;
   var fetch = opts.fetch || defaultFetch;
 
   return {
     get: function get(path) {
-      var params = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       return fetch(url(path, params), {
         method: 'GET',
@@ -56,10 +55,9 @@ var Http = function Http() {
       }).then(decode);
     },
     post: function post(path, data) {
-      var _encode = encode(data);
-
-      var body = _encode.body;
-      var contentTypeHeaders = _encode.headers;
+      var _encode = encode(data),
+          body = _encode.body,
+          contentTypeHeaders = _encode.headers;
 
       var fetchOptions = {
         method: 'POST',
@@ -70,10 +68,9 @@ var Http = function Http() {
       return fetch(url(path), fetchOptions).then(decode);
     },
     put: function put(path, data) {
-      var _encode2 = encode(data);
-
-      var body = _encode2.body;
-      var contentTypeHeaders = _encode2.headers;
+      var _encode2 = encode(data),
+          body = _encode2.body,
+          contentTypeHeaders = _encode2.headers;
 
       var fetchOptions = {
         method: 'PUT',
@@ -84,10 +81,9 @@ var Http = function Http() {
       return fetch(url(path), fetchOptions).then(decode);
     },
     delete: function _delete(path, data) {
-      var _encode3 = encode(data);
-
-      var body = _encode3.body;
-      var contentTypeHeaders = _encode3.headers;
+      var _encode3 = encode(data),
+          body = _encode3.body,
+          contentTypeHeaders = _encode3.headers;
 
       var fetchOptions = {
         method: 'DELETE',
@@ -101,10 +97,10 @@ var Http = function Http() {
 };
 
 Http.urlBuilder = function (apiBase) {
-  var defaultParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var defaultParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   return function buildUrl(path) {
-    var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     if (typeof defaultParams === 'function') {
       params = (0, _merge2.default)({}, params, defaultParams());
@@ -124,10 +120,10 @@ Http.urlBuilder = function (apiBase) {
 };
 
 Http.headerBuilder = function () {
-  var defaultHeaders = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var defaultHeaders = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   return function buildHeaders() {
-    var headers = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     if (typeof defaultHeaders === 'function') {
       return (0, _merge2.default)({}, headers, defaultHeaders());
